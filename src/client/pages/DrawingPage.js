@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Helmet } from 'react-helmet';
 import { bindActionCreators } from 'redux';
 import { Stage, Layer, Line } from 'react-konva';
 
@@ -50,8 +51,18 @@ const DrawingPage = (props) => {
     isDrawing.current = false;
   };
 
+  const head = () => {
+    return (
+      <Helmet>
+        <title>{`${props.drawings.length} Drawings`}</title>
+        <meta property="og:title" content="Drawing Canvas" />
+      </Helmet>
+    );
+  }
+
   return (
     <div>
+      {head()}
       <Stage
         ref={stageRef}
         width={500}

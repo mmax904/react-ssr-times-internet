@@ -9,12 +9,10 @@
   },
   "scripts": {
     "start": "npm run prod:build && forever build/bundle.js",
-    "dev": "npm-run-all --parallel dev:*",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prod:server": "nodemon --watch build --exec \"node build/bundle.js\"",
     "prod:build": "npm run prod:build-server && npm run prod:build-client",
     "prod:build-server": "webpack --config webpack.server.js",
     "prod:build-client": "webpack --config webpack.client.js",
+    "dev": "npm-run-all --parallel dev:*",
     "dev:server": "nodemon --watch build --exec \"node build/bundle.js\"",
     "dev:build-server": "webpack --config webpack.server.js --watch",
     "dev:build-client": "webpack --config webpack.client.js --watch"
@@ -52,6 +50,7 @@
     "redux-thunk": "^2.3.0",
     "rimraf": "^3.0.2",
     "serialize-javascript": "^5.0.1",
+    "terser-webpack-plugin": "^5.0.3",
     "webpack": "^5.11.1",
     "webpack-cli": "^4.3.0",
     "webpack-dev-server": "^3.11.1",

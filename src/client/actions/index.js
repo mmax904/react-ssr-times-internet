@@ -11,7 +11,6 @@ export const fetchCurrentUser = () => async (dispatch, getState, api) => {
 export const FETCH_DRAWINGS = 'fetch_drawings';
 export const fetchDrawings = () => async (dispatch, getState, api) => {
   const res = await api.get('/user/drawings');
-
   dispatch({
     type: FETCH_DRAWINGS,
     payload: res

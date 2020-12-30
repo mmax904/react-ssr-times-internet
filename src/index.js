@@ -17,7 +17,7 @@ app.use(
   '/api',
   proxy('https://manish-api-server.herokuapp.com', {
     proxyReqOptDecorator(opts) {
-      opts.headers['x-forwarded-host'] = `localhost:${PORT}`;
+      opts.headers['x-forwarded-host'] = 'https://manish-api-server.herokuapp.com';
       return opts;
     }
   })
