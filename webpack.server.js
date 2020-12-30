@@ -4,7 +4,6 @@ const baseConfig = require('./webpack.base.js');
 const nodeExternals = require('webpack-node-externals');
 
 const config = {
-    mode: 'development',
     target: 'node',
     externals: [nodeExternals()],
     entry: './src/index.js',
