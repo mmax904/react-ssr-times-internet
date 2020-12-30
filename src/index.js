@@ -1,4 +1,5 @@
 import 'babel-polyfill';
+import path from 'path';
 import express from 'express';
 import Routes from './client/Routes';
 import proxy from 'express-http-proxy';
@@ -17,12 +18,12 @@ app.use(
   '/api',
   proxy('https://manish-api-server.herokuapp.com', {
     proxyReqOptDecorator(opts) {
-      opts.headers['x-forwarded-host'] = 'https://manish-canvas.herokuapp.com';
+      opts.headers['x-forwarded-host'] = 'manish-canvas.herokuapp.com';
       return opts;
     }
   })
 );
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, '../public')));
 app.get('*', (req, res) => {
   const store = createStore(req);
 
