@@ -36,6 +36,10 @@ const DrawingPage = (props) => {
     setLines(lines.concat());
   };
 
+  const handleMouseUp = () => {
+    isDrawing.current = false;
+  };
+
   const handleExport = async () => {
     const uri = stageRef.current.toDataURL();
     const imageBlob = dataURItoBlob(uri);
@@ -45,10 +49,6 @@ const DrawingPage = (props) => {
     const form = new FormData();
     form.append('image', imageFile);
     props.actions.uploadDrawings(form);
-  };
-
-  const handleMouseUp = () => {
-    isDrawing.current = false;
   };
 
   const head = () => {
@@ -67,6 +67,9 @@ const DrawingPage = (props) => {
         ref={stageRef}
         width={500}
         height={500}
+        onTouchStart={handleMouseDown}
+        onTouchMove={handleMouseMove}
+        onTouchEnd={handleMouseUp}
         onMouseDown={handleMouseDown}
         onMousemove={handleMouseMove}
         onMouseup={handleMouseUp}
