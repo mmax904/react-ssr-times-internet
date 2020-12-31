@@ -14,6 +14,7 @@ const DrawingPage = (props,context) => {
   const drawRef = React.useRef(null);
   const [tool, setTool] = React.useState('pen');
   const [lines, setLines] = React.useState([]);
+  const [uploading, setUploading] = React.useState(false);
   const [boardSize, setBoardSize] = React.useState({ width: 500, height: 500 });
   const isDrawing = React.useRef(false);
   const stageRef = React.useRef(null);
@@ -64,7 +65,8 @@ const DrawingPage = (props,context) => {
     });
     const form = new FormData();
     form.append('image', imageFile);
-    props.actions.uploadDrawings(form);
+    setUploading(true);
+    props.actions.uploadDrawings(form).then(_ => setUploading(false));
   };
 
   const head = () => {
@@ -84,7 +86,7 @@ const DrawingPage = (props,context) => {
           {renderDrawings()}
         </ol>
       </div>
-      <div className="col m6 s12 draw-container-draw-area" ref={drawRef}>
+      <div className={`col m6 s12 draw-container-draw-area${uploading ? ' disabled-area' : ''}`} ref={drawRef}>
         <div className="draw-container-actions">
           <button className="capture-image" onClick={handleExport}>Take SnapShot</button>
           <select

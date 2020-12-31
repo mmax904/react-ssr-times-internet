@@ -27,3 +27,7 @@ nav .brand-logo {
     display: inline-block;
     width: 100px;
 }
+
+.disabled-area {
+    pointer-events: none;
+}

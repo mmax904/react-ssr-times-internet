@@ -19,10 +19,11 @@ export const fetchDrawings = () => async (dispatch, getState, api) => {
 
 export const UPLOAD_DRAWINGS = 'upload_drawings';
 export const uploadDrawings = (data) => async (dispatch, getState, api) => {
-  const res = await api.post('/drawing/upload', data);
-
-  dispatch({
-    type: FETCH_DRAWINGS,
-    payload: res
+  return api.post('/drawing/upload', data)
+  .then(resp => {
+    dispatch({
+      type: FETCH_DRAWINGS,
+      payload: resp
+    });
   });
 };
