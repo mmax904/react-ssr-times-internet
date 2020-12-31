@@ -82,6 +82,7 @@ const DrawingPage = (props,context) => {
     <div className="row draw-container">
       {head()}
       <div className="col m6 s12 draw-container-listing">
+        <h4>Snapshot listing:</h4>
         <ol>
           {renderDrawings()}
         </ol>
