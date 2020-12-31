@@ -1,0 +1,29 @@
+nav .brand-logo {
+    position: relative;
+    transform: none;
+    left: 0;
+}
+
+.draw-container-listing ol li {
+    word-break: break-all;
+    line-height: 20px;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+.draw-container-draw-area {
+    display: flex;
+    border: 5px dotted #ee6e73;
+    flex-wrap: wrap;
+}
+
+.draw-container-actions {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.draw-container-actions select {
+    display: inline-block;
+    width: 100px;
+}

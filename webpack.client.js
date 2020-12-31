@@ -11,8 +11,9 @@ const config = {
     path: path.resolve(__dirname, 'public')
   },
   optimization: {
+    minimize: true,
     minimizer: [new TerserPlugin()],
-  },
+  }
 };
 
 module.exports = merge(baseConfig, config);

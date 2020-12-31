@@ -3,16 +3,32 @@ import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { bindActionCreators } from 'redux';
 import { Stage, Layer, Line } from 'react-konva';
+import withStyles from 'isomorphic-style-loader/withStyles'
 
+import s from './DrawingPage.css';
 import { dataURItoBlob } from '../utils/common';
 import requireAuth from '../components/hocs/requireAuth';
 import { fetchDrawings, uploadDrawings } from '../actions';
 
-const DrawingPage = (props) => {
+const DrawingPage = (props,context) => {
+  const drawRef = React.useRef(null);
   const [tool, setTool] = React.useState('pen');
   const [lines, setLines] = React.useState([]);
+  const [boardSize, setBoardSize] = React.useState({ width: 500, height: 500 });
   const isDrawing = React.useRef(false);
   const stageRef = React.useRef(null);
+  React.useEffect(() => {
+    setBoardSize({
+      width: drawRef.current.clientWidth, height: drawRef.current.clientHeight
+    });
+    props.actions.fetchDrawings();
+  }, []);
+
+  const renderDrawings = () => {
+    return props.drawings.map(drawing => {
+      return <li key={drawing._id} onClick={() => window.open(drawing.drawingUrl,'_blank')}>{drawing.drawingUrl}</li>;
+    });
+  }
 
   const handleMouseDown = (e) => {
     isDrawing.current = true;
@@ -61,45 +77,55 @@ const DrawingPage = (props) => {
   }
 
   return (
-    <div>
+    <div className="row draw-container">
       {head()}
-      <Stage
-        ref={stageRef}
-        width={500}
-        height={500}
-        onTouchStart={handleMouseDown}
-        onTouchMove={handleMouseMove}
-        onTouchEnd={handleMouseUp}
-        onMouseDown={handleMouseDown}
-        onMousemove={handleMouseMove}
-        onMouseup={handleMouseUp}
-      >
-        <Layer>
-          {lines.map((line, i) => (
-            <Line
-              key={i}
-              points={line.points}
-              stroke="#df4b26"
-              strokeWidth={line.tool === 'eraser' ? 50 : 5}
-              tension={0.5}
-              lineCap="round"
-              globalCompositeOperation={
-                line.tool === 'eraser' ? 'destination-out' : 'source-over'
-              }
-            />
-          ))}
-        </Layer>
-      </Stage>
-      <button onClick={handleExport}>Click here to log stage data URL</button>
-      <select
-        value={tool}
-        onChange={(e) => {
-          setTool(e.target.value);
-        }}
-      >
-        <option value="pen">Pen</option>
-        <option value="eraser">Eraser</option>
-      </select>
+      <div className="col m6 s12 draw-container-listing">
+        <ol>
+          {renderDrawings()}
+        </ol>
+      </div>
+      <div className="col m6 s12 draw-container-draw-area" ref={drawRef}>
+        <div className="draw-container-actions">
+          <button className="capture-image" onClick={handleExport}>Take SnapShot</button>
+          <select
+            className="select-tool"
+            value={tool}
+            onChange={(e) => {
+              setTool(e.target.value);
+            }}
+          >
+            <option key="pen" value="pen">Pen</option>
+            <option key="eraser" value="eraser">Eraser</option>
+          </select>
+        </div>
+        <Stage
+          ref={stageRef}
+          {...boardSize}
+          className="draw-container-canvas-area"
+          onTouchStart={handleMouseDown}
+          onTouchMove={handleMouseMove}
+          onTouchEnd={handleMouseUp}
+          onMouseDown={handleMouseDown}
+          onMousemove={handleMouseMove}
+          onMouseup={handleMouseUp}
+        >
+          <Layer>
+            {lines.map((line, i) => (
+              <Line
+                key={i}
+                points={line.points}
+                stroke="#df4b26"
+                strokeWidth={line.tool === 'eraser' ? 50 : 5}
+                tension={0.5}
+                lineCap="round"
+                globalCompositeOperation={
+                  line.tool === 'eraser' ? 'destination-out' : 'source-over'
+                }
+              />
+            ))}
+          </Layer>
+        </Stage>
+      </div>
     </div>
   );
 };
@@ -111,10 +137,9 @@ const mapDispatchToProps = dispatch => ({
 function mapStateToProps({ drawings }) {
   return { drawings };
 }
-
 export default {
   component: connect(mapStateToProps, mapDispatchToProps)(
-    requireAuth(DrawingPage)
+    requireAuth(withStyles(s)(DrawingPage))
   ),
   loadData: ({ dispatch }) => dispatch(fetchDrawings())
 };
