@@ -5,12 +5,11 @@ const nodeExternals = require('webpack-node-externals');
 
 const config = {
     target: 'node',
-    externals: [nodeExternals()],
+    externals: ['@loadable/component',nodeExternals()],
     entry: './src/index.js',
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname,'build'),
-
     }
 }
 

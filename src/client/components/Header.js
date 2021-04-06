@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import s from '../assets/styles/styles.scss';
+import withStyles from 'isomorphic-style-loader/withStyles';
 
 const Header = ({ auth }) => {
   const authButton = auth ? (
@@ -30,4 +32,5 @@ function mapStateToProps({ auth }) {
   return { auth };
 }
 
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps)(withStyles(s)(Header));
+

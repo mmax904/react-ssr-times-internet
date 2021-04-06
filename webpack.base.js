@@ -1,5 +1,5 @@
 const path = require('path');
-const nodeExternals = require('webpack-node-externals');
+const LoadablePlugin = require('@loadable/webpack-plugin');
 
 module.exports = {
   mode: 'production',
@@ -14,8 +14,35 @@ module.exports = {
             '@babel/preset-env',
             '@babel/preset-react',
           ],
-          plugins: ['@babel/plugin-proposal-class-properties']
+          plugins: [
+            '@babel/plugin-proposal-class-properties',
+            '@babel/plugin-syntax-dynamic-import',
+            '@loadable/babel-plugin'
+          ]
         }
+      },
+      {
+        test: /\.scss$/i,
+        use: [
+          'isomorphic-style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1,
+              esModule: false,
+            }
+          },
+          'sass-loader',
+          {
+            loader: 'sass-resources-loader',
+            options: {
+              resources: [
+                './src/client/assets/styles/colors.scss',
+                './src/client/assets/styles/variables.scss',
+              ],
+            },
+          },
+        ]
       },
       {
         test: /\.css$/i,
@@ -30,7 +57,16 @@ module.exports = {
             }
           }
         ]
-      }
+      },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: 'asset/resource',
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: 'asset/resource',
+      },
     ]
-  }
+  },
+  plugins: [new LoadablePlugin()],
 }
